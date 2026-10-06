@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -22,26 +23,37 @@ func cleanInput(text string) []string {
 	return result
 }
 
-type CommandCallback func() error
+func startRepl(cfg *config) {
+	scanner := bufio.NewScanner(os.Stdin)
 
-func commandExit() error {
-	fmt.Println("Closing the Pokedex... Goodbye!")
-	os.Exit(0)
-	return nil
+	for {
+		fmt.Print("Pokedex > ")
+		scanner.Scan()
+		if err := scanner.Err(); err != nil {
+			fmt.Printf("Scanner error: %v", err)
+		}
+
+		input := scanner.Text()
+		clean := cleanInput(input)
+
+		command, ok := cfg.commands[clean[0]]
+		if ok {
+			command.callback(cfg)
+		} else {
+			fmt.Println("Unknown command")
+		}
+
+	}
 }
 
-func commandHelp() error {
-	fmt.Print(`Welcome to the Pokedex!
-Usage:
-	
-help: Displays a help message
-exit: Exit the Pokedex
-`)
-	return nil
+type config struct {
+	commands       map[string]cliCommand
+	previousMapUrl string
+	nextMapUrl     string
 }
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func() error
+	callback    func(*config) error
 }

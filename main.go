@@ -1,43 +1,25 @@
 package main
 
-import (
-	"bufio"
-	"fmt"
-	"os"
-)
-
 func main() {
-	scanner := bufio.NewScanner(os.Stdin)
-
-	commands := map[string]cliCommand{
-		"exit": {
-			name:        "exit",
-			description: "Exit the Pokedex",
-			callback:    commandExit,
-		},
-		"help": {
-			name:        "help",
-			description: "Displays a help message",
-			callback:    commandHelp,
+	cfg := config{
+		commands: map[string]cliCommand{
+			"exit": {
+				name:        "exit",
+				description: "Exit the Pokedex",
+				callback:    commandExit,
+			},
+			"help": {
+				name:        "help",
+				description: "Displays a help message",
+				callback:    commandHelp,
+			},
+			"map": {
+				name:        "map",
+				description: "Displays the names of 20 location areas in the Pokemon world.",
+				callback:    commandMap,
+			},
 		},
 	}
 
-	for {
-		fmt.Print("Pokedex > ")
-		scanner.Scan()
-		if err := scanner.Err(); err != nil {
-			fmt.Printf("Scanner error: %v", err)
-		}
-
-		input := scanner.Text()
-		clean := cleanInput(input)
-
-		command, ok := commands[clean[0]]
-		if ok {
-			command.callback()
-		} else {
-			fmt.Println("Unknown command")
-		}
-
-	}
+	startRepl(&cfg)
 }
