@@ -6,17 +6,15 @@ import (
 	"github.com/ashuffman/pokedexcli/internal/pokeapi"
 )
 
-func commandMap(cfg *config) error {
-	// set url to location-area end-point
-	url := "https://pokeapi.co/api/v2/location-area/"
-
-	// if cfg.nextMapURL is not nil dereference it and assign it to the url variable
-	if cfg.nextMapUrl != nil {
-		url = *cfg.nextMapUrl
-	} else if cfg.previousMapUrl != nil {
-		fmt.Println("there is no next page")
+func commandMapB(cfg *config) error {
+	// if we're on the first page, return the "first page" message and return nil
+	if cfg.previousMapUrl == nil {
+		fmt.Println("you're on the first page")
 		return nil
 	}
+
+	// set url to previous
+	url := *cfg.previousMapUrl
 
 	mapResponse, err := pokeapi.MakeRequest(url)
 	if err != nil {

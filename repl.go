@@ -48,8 +48,8 @@ func startRepl(cfg *config) {
 
 type config struct {
 	commands       map[string]cliCommand
-	previousMapUrl string
-	nextMapUrl     string
+	previousMapUrl *string
+	nextMapUrl     *string
 }
 
 type cliCommand struct {
