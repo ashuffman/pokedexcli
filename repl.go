@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/ashuffman/pokedexcli/internal/pokeapi"
 )
 
 func cleanInput(text string) []string {
@@ -50,6 +52,7 @@ type config struct {
 	commands       map[string]cliCommand
 	previousMapUrl *string
 	nextMapUrl     *string
+	client         pokeapi.Client
 }
 
 type cliCommand struct {

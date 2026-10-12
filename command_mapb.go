@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/ashuffman/pokedexcli/internal/pokeapi"
 )
 
 func commandMapB(cfg *config) error {
@@ -16,7 +14,7 @@ func commandMapB(cfg *config) error {
 	// set url to previous
 	url := *cfg.previousMapUrl
 
-	mapResponse, err := pokeapi.MakeRequest(url)
+	mapResponse, err := cfg.client.MakeRequest(url)
 	if err != nil {
 		return err
 	}

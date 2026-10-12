@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-
-	"github.com/ashuffman/pokedexcli/internal/pokeapi"
 )
 
 func commandMap(cfg *config) error {
@@ -13,12 +11,9 @@ func commandMap(cfg *config) error {
 	// if cfg.nextMapURL is not nil dereference it and assign it to the url variable
 	if cfg.nextMapUrl != nil {
 		url = *cfg.nextMapUrl
-	} else if cfg.previousMapUrl != nil {
-		fmt.Println("there is no next page")
-		return nil
 	}
 
-	mapResponse, err := pokeapi.MakeRequest(url)
+	mapResponse, err := cfg.client.MakeRequest(url)
 	if err != nil {
 		return err
 	}

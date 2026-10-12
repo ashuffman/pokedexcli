@@ -1,6 +1,16 @@
 package main
 
+import (
+	"time"
+
+	"github.com/ashuffman/pokedexcli/internal/pokeapi"
+)
+
 func main() {
+	const (
+		cacheInterval = 5 * time.Second
+	)
+
 	cfg := config{
 		commands: map[string]cliCommand{
 			"exit": {
@@ -24,6 +34,7 @@ func main() {
 				callback:    commandMapB,
 			},
 		},
+		client: pokeapi.NewClient(cacheInterval),
 	}
 
 	startRepl(&cfg)
