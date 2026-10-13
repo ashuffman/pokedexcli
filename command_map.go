@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/ashuffman/pokedexcli/internal/pokeapi"
 )
 
-func commandMap(cfg *config) error {
+func commandMap(cfg *config, par string) error {
 	// set url to location-area end-point
 	url := "https://pokeapi.co/api/v2/location-area/"
 
@@ -13,10 +15,12 @@ func commandMap(cfg *config) error {
 		url = *cfg.nextMapUrl
 	}
 
-	mapResponse, err := cfg.client.MakeRequest(url)
+	data, err := cfg.client.MakeRequest(url)
 	if err != nil {
 		return err
 	}
+
+	mapResponse, err := pokeapi.MapUnmarshal(data)
 
 	cfg.nextMapUrl = mapResponse.Next
 	cfg.previousMapUrl = mapResponse.Previous

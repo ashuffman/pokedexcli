@@ -33,6 +33,11 @@ func main() {
 				description: "Displays the previous 20 location areas in the Pokemon world.",
 				callback:    commandMapB,
 			},
+			"explore": {
+				name:        "explore",
+				description: "Displays a list of potential Pokémon encounters for a specified location",
+				callback:    commandExplore,
+			},
 		},
 		client: pokeapi.NewClient(cacheInterval),
 	}

@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+
+	"github.com/ashuffman/pokedexcli/internal/pokeapi"
 )
 
-func commandMapB(cfg *config) error {
+func commandMapB(cfg *config, par string) error {
 	// if we're on the first page, return the "first page" message and return nil
 	if cfg.previousMapUrl == nil {
 		fmt.Println("you're on the first page")
@@ -14,10 +16,12 @@ func commandMapB(cfg *config) error {
 	// set url to previous
 	url := *cfg.previousMapUrl
 
-	mapResponse, err := cfg.client.MakeRequest(url)
+	data, err := cfg.client.MakeRequest(url)
 	if err != nil {
 		return err
 	}
+
+	mapResponse, err := pokeapi.MapUnmarshal(data)
 
 	cfg.nextMapUrl = mapResponse.Next
 	cfg.previousMapUrl = mapResponse.Previous

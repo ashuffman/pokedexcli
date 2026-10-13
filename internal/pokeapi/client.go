@@ -1,25 +1,12 @@
 package pokeapi
 
 import (
-	"encoding/json"
 	"io"
 	"net/http"
 	"time"
 
 	"github.com/ashuffman/pokedexcli/internal/pokecache"
 )
-
-type Response struct {
-	Count    int      `json:"count"`
-	Next     *string  `json:"next"`
-	Previous *string  `json:"previous"`
-	Results  []Result `json:"results"`
-}
-
-type Result struct {
-	Name string `json:"name"`
-	URL  string `json:"url"`
-}
 
 type Client struct {
 	client http.Client
@@ -34,38 +21,32 @@ func NewClient(interval time.Duration) Client {
 	return c
 }
 
-func (c Client) MakeRequest(url string) (Response, error) {
+func (c Client) MakeRequest(url string) ([]byte, error) {
 	// check the cache
 	data, ok := c.cache.Get(url)
 	if !ok {
 		// create new request
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
-			return Response{}, err
+			return []byte{}, err
 		}
 
 		// make request
 		res, err := c.client.Do(req)
 		if err != nil {
-			return Response{}, err
+			return []byte{}, err
 		}
 		defer res.Body.Close()
 
 		// reading response body into data variable
 		data, err = io.ReadAll(res.Body)
 		if err != nil {
-			return Response{}, err
+			return []byte{}, err
 		}
 
 		// cache the response
 		c.cache.Add(url, data)
 	}
 
-	// unmarshal json data into a resonse struct
-	var mapResponse Response
-	if err := json.Unmarshal(data, &mapResponse); err != nil {
-		return Response{}, err
-	}
-
-	return mapResponse, nil
+	return data, nil
 }

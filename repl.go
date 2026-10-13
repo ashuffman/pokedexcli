@@ -40,7 +40,13 @@ func startRepl(cfg *config) {
 
 		command, ok := cfg.commands[clean[0]]
 		if ok {
-			command.callback(cfg)
+			var par string
+			if len(clean) > 1 {
+				par = clean[1]
+			} else {
+				par = ""
+			}
+			command.callback(cfg, par)
 		} else {
 			fmt.Println("Unknown command")
 		}
@@ -58,5 +64,5 @@ type config struct {
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, string) error
 }
