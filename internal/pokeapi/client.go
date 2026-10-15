@@ -1,6 +1,7 @@
 package pokeapi
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"time"
@@ -37,6 +38,11 @@ func (c Client) MakeRequest(url string) ([]byte, error) {
 			return []byte{}, err
 		}
 		defer res.Body.Close()
+
+		// check for status code, and return an error on an unsuccuessful call
+		if res.StatusCode > 299 {
+			return nil, fmt.Errorf("bad response status: %s", res.Status)
+		}
 
 		// reading response body into data variable
 		data, err = io.ReadAll(res.Body)

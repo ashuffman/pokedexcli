@@ -35,11 +35,17 @@ func main() {
 			},
 			"explore": {
 				name:        "explore",
-				description: "Displays a list of potential Pokémon encounters for a specified location",
+				description: "Displays a list of potential Pokémon encounters for a specified location.",
 				callback:    commandExplore,
 			},
+			"catch": {
+				name:        "catch",
+				description: "Attempts to catch specified Pokémon. Caught Pokémon are added to user Pokédex.",
+				callback:    commandCatch,
+			},
 		},
-		client: pokeapi.NewClient(cacheInterval),
+		pokedex: pokeapi.NewPokedex(),
+		client:  pokeapi.NewClient(cacheInterval),
 	}
 
 	startRepl(&cfg)

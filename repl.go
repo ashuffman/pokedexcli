@@ -56,6 +56,7 @@ func startRepl(cfg *config) {
 
 type config struct {
 	commands       map[string]cliCommand
+	pokedex        pokeapi.Pokedex
 	previousMapUrl *string
 	nextMapUrl     *string
 	client         pokeapi.Client
