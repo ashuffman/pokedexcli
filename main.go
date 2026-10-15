@@ -48,6 +48,11 @@ func main() {
 				description: "Displays information about a specified Pokémon from your Pokédex",
 				callback:    commandInspect,
 			},
+			"pokedex": {
+				name:        "pokedex",
+				description: "Lists all Pokémon in your Pokédex.",
+				callback:    commandPokedex,
+			},
 		},
 		pokedex: pokeapi.NewPokedex(),
 		client:  pokeapi.NewClient(cacheInterval),
