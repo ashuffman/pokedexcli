@@ -43,6 +43,11 @@ func main() {
 				description: "Attempts to catch specified Pokémon. Caught Pokémon are added to user Pokédex.",
 				callback:    commandCatch,
 			},
+			"inspect": {
+				name:        "inspect",
+				description: "Displays information about a specified Pokémon from your Pokédex",
+				callback:    commandInspect,
+			},
 		},
 		pokedex: pokeapi.NewPokedex(),
 		client:  pokeapi.NewClient(cacheInterval),
